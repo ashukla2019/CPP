@@ -69,8 +69,19 @@ int main()
 		//push_back and push_front
 		//lt.push_front(11);
 		//lt.push_back(18);
-	
+	        // using insert to insert
+                // 2 element at the 4th position
+                // inserts 2 occurrences
+                // of 7 at 4th position
+                list1.insert(it, 2, 7);
 	/************Access****************************/
+                front() - returns the first element of the list
+                back() - returns the last element of the list
+                // display the first element
+                cout << "First Element: " << numbers.front() << endl;
+  
+                // display the last element
+                cout << "Last Element: " << numbers.back();
 		//C++ : How to get element by index in List: list doesn’t have operator []
 		// Find 3rd element from list
 		// It returns a new iterator pointing to n position after the
@@ -84,14 +95,20 @@ int main()
 		}*/
 	
 	/************Remove data*****************************/
-		//Erase elements: can be removed by direct passing the value.
-		//erase element 30 
-		int y = 20;
-		lt.remove(y);
-		for(auto it = lt.begin(); it != lt.end(); it++)
-		{
+                 1) pop_front() - removes the element at the beginning of the list
+                 2) pop_back() - removes the element at the end of the list
+                    // remove the first element of the list
+                    numbers.pop_front();
+                    // remove the last element of the list
+                    numbers.pop_back();
+		 3) Erase elements: can be removed by direct passing the value.
+		    //erase element 30 
+		    int y = 20;
+		    lt.remove(y);
+		    for(auto it = lt.begin(); it != lt.end(); it++)
+		    {
 			cout<<"values in list:"<<*it<<endl;
-		}
+		    }
 		//Erase elements by position and position range
 		//lt.erase(lt.begin()); //by position but do not use like vec.begin()+1
 		/*for(auto it = lt.begin(); it != lt.end(); it++)
