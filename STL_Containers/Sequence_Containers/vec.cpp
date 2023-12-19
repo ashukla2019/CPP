@@ -103,20 +103,26 @@ int main()
 		//vector<char>vec(str.begin(), str.end());
 		
 	/**************Add/Insert***********************************/
-	
+	        push_back() invokes copy/move on the supplied object; emplace_back() constructs in place. 
 		//insert value using push_back:
 		//vec.push_back(50);
 		
 		//Insert element in vector:
 		//vec.insert(vec.begin(), 7);
-		
-		
+			
 	/************Access****************************/
 		//vector::at()
 		vec.at(3);
-		
+	        Like an array, we can also use the square brackets [] to access vector elements. For example,
+                vector<int> num {1, 2, 3};
+                cout << num[1];  // Output: 2
+
+	/************Change data****************************/
+	       We can change an element of the vector using the same at() function.
+	       // change elements at indexes 1 and 4
+               num.at(1) = 9;
+               num.at(4) = 7;	
 	/************Remove data*****************************/
-		
 		//vec.pop_back();
 		//iterate in reverse order:
 		/*for(auto it = vec.rbegin(); it != vec.rend(); it++)
@@ -165,3 +171,6 @@ int main()
 		}*/
 	return 0;
 }
+
+
+
