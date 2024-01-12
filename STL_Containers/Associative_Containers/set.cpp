@@ -2,6 +2,7 @@
 Set :
 	Set is an associative container which we need to store unique elements.
 	It always keeps the elements in sorted order.
+        Set is implemented using binary search tree.
 	Internally it maintains a balanced binary search tree of elements. Therefore, 
 	when we search an element inside the set then it takes only log(n) complexity to search it.
 */
@@ -99,9 +100,14 @@ int main ()
 		
 	/************Access****************************/
 		//To access a particular index, you can use this :
-		int first = *next(myset.begin(),0);
-		int third = *next(myset.begin(),2);
+		 // using next() function
+                auto it = next(s.begin(), n);
+                // Printing the element at index n
+                cout<<*it;
 
+		  // Using advance function to
+                  // access nth index
+                  advance(it,n);
 	/************Remove data*****************************/
 		myset.erase (it); //erase by position
 
