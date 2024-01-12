@@ -107,7 +107,9 @@ int main ()
 
 		  // Using advance function to
                   // access nth index
-                  advance(it,n);
+	           // Initializing iterator
+                    auto it = s.begin();
+                    advance(it,n);
 	/************Remove data*****************************/
 		myset.erase (it); //erase by position
 
