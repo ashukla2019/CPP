@@ -1,89 +1,79 @@
-#include <iostream> 
-#include <vector>
-#include <vector> 
+#include <iostream>
 using namespace std;
 
-class A 
-{ 
-    int *ptr;
+class A
+{
+	int* ptr;
 public:
-	//Conversion constructor
-    A(int x)
-    { 
-        cout <<"Calling conversion constructor"<<endl; 
-        ptr = new int; 
-        *ptr = x;
-    }
-	//Copy Constructor:copy of object is created
-    A( const A & obj)
-    { 
-        this->ptr = new int;
-        *ptr = *(obj.ptr); // Deep copying
-        cout <<"Calling Copy constructor"<<endl;
-    }
-	// Move ctor: It will simply shift the resources of rvalue to lvalue without creating a copy.
-    A ( A && obj)
-    {
-        cout <<"Calling Move constructor"<<endl; 
-        this->ptr = obj.ptr;
-        obj.ptr = NULL;
-    }
-	//Assignment operator
-    A& operator=( const A & obj)
-    { 
-        this->ptr = new int;
-        *ptr = *(obj.ptr); 
-        cout <<"Assignment operator"<<endl;
+	A()=default;
+	A(int x)
+	{
+		cout<<"conversion ctor\n";
+		ptr=new int;
+		*ptr=x;
+	}
+	A(const A& a)
+	{
+		cout<<"copy ctor\n";
+		ptr=new int;
+		*ptr=*(a.ptr);
+	}
+	A& operator=(const A& a)
+	{
+		cout<<"Assignment optr\n";
+		ptr=new int;
+		*ptr=*a.ptr;
 		return *this;
-    }
-	//Move Assignment operator
-    A& operator= ( A && obj)
-    {
-        cout <<"Calling Move assignment operator"<<endl; 
-        this->ptr = obj.ptr;
-        obj.ptr = NULL;
+	}
+
+	A(A&& a)
+	{
+		cout<<"Move ctor\n";
+		ptr=a.ptr;
+		a.ptr=nullptr;
+	}
+	A& operator=(A&& a)
+	{
+		cout<<"Move Assignment optr\n";
+		ptr=a.ptr;
+		a.ptr=nullptr;
 		return *this;
-    }
-    // Destructor
-    ~A()
-    { 
-       
-        cout<<"Calling Destructor"<<endl;
-        delete ptr;
-    }
-        
-    void display()
-    {
-        cout<<"value is:"<<*ptr<<endl;
-            
-    }
+	}
+
+	A operator+(A obj)
+	{
+		return (*ptr + *obj.ptr); //This will be calling conversion ctor: object has to be returned but returning value.
+	}
+	void print()
+	{
+		cout<<"val"<<*ptr;
+	}
+	
 };
 
-void foo( A a1)
+A fun(A a1)
+{
+	//A temp;
+	return a1;
+}
+void fun_by_ref( A& a1)
 {
     
 }
-
-void foo_by_ref( A& a1)
+A createA()
 {
-    
-}
 
-A fun()
-{
-	
 }
-
 int main()
 {
-    A a1(10); //calling conversion constructor//
-    //vector <A> vec;
+	A a1(10);
+	A a2=a1; //will call copy ctor
+	//A a2=fun(a1); //will call move ctor: A _temp = fun() then A a2= _temp;
+	//A a2=move(a1); //will call move ctor
+	A a3= a1+a2; // A _temp=a1+a2 => A a3=_temp(will call move to move temp object to A a3)
+	a3.print();
+	fun(createA()); //will create temporary object, so will call move ctor.
+	//vector <A> vec;
     //vec.push_back(A(10));
-	A a3 = fun(); //returning object by value, will call move ctor.
-	//foo_by_ref(a3); //call no constructor
-	//foo(a3); //call copy constructor
-	//foo(std::move(a3)); //call move constructor
-	//foo(fun()); //will create temporary object, so will call move ctor.
-    return 0;
-    
+	return 0;
 }
