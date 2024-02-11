@@ -51,32 +51,61 @@ independently of the composite class. In other words, the lifetime of the compon
 is controlled by the composite class.
 
 Example of Composition in C++:
-class Engine 
+class Engine
 {
-public:
-    void start() 
-    {
-        // Code to start the engine
-    }
+	int power;
+	public:
+	Engine(){}
+	Engine(int power):power(power)
+	{
+		cout<<"Engine object is created"<<endl;
+	}
+	Engine(const Engine& e)
+	{
+		cout<<"Engine::Copy ctor is called"<<endl;
+	}
+	Engine& operator=(const Engine& e)
+	{
+		cout<<"Engine::assignment operator is called"<<endl;
+	}
+	~Engine()
+	{
+		cout<<"Engine object is destroyed"<<endl;
+	}
 };
-
-class Car 
+class Car
 {
-public:
-    Car() : engine(new Engine()) {}
-    void startCar() {
-        engine->start();
-    }
-private:
-    Engine* engine;
+	int model;
+	string name;
+	Engine eng;
+	public:
+	//If we don't call Engine::Engine(const Engine&), then Engine::Engine() will be called
+	//to initialize Engine object of class Car.
+	Car(string name, int model, Engine eng1): name(name), model(model),eng(eng1) //will call copy ctor of Engine
+	{
+		//eng = eng1; //will call assignment operator
+		cout<<"Car object is created"<<endl;
+	}
+	Car(const Car& c):eng(c.eng)///will call copy ctor of Engine
+	{
+		//eng = c.eng; //will call assignment operator
+		cout<<"Car object is created"<<endl;
+	}
+	~Car()
+	{
+		cout<<"Car object is destroyed"<<endl;
+	}
 };
-
-int main() 
+int main()
 {
-    Car car;
-    car.startCar();
-    return 0;
+	Engine e(10);
+	/*Car *c = new Car ("BMW", 134, e);
+	delete c;*/
+	Car c("BMW", 134, e);
+	Car c1 = c;
+	return 0;
 }
+
 In this example, we have two classes: Engine and Car. The Car class is composed of an Engine
 object. The Engine object is an essential part of the Car object, and if the Car object is 
 destroyed, the Engine object will also be destroyed.
