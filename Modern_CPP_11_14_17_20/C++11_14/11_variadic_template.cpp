@@ -31,3 +31,50 @@ Variadic template: are class or function templates, that can take any variable(z
 		return 0;
 	}
 
+Internal working:
+/* First instantiated from: insights.cpp:17 */
+#ifdef INSIGHTS_USE_TEMPLATE
+	template<>
+	int add<int>(int var1)
+	{
+	  return var1;
+	}
+#endif
+
+/* First instantiated from: insights.cpp:23 */
+	#ifdef INSIGHTS_USE_TEMPLATE
+	template<>
+	int add<int, int, int, int>(int var1, int __var21, int __var22, int __var23)
+	{
+	  return var1 + add(__var21, __var22, __var23);
+	}
+	#endif
+	
+	
+	/* First instantiated from: insights.cpp:17 */
+	#ifdef INSIGHTS_USE_TEMPLATE
+	template<>
+	int add<int, int, int>(int var1, int __var21, int __var22)
+	{
+	  return var1 + add(__var21, __var22);
+	}
+	#endif
+	
+	
+	/* First instantiated from: insights.cpp:17 */
+	#ifdef INSIGHTS_USE_TEMPLATE
+	template<>
+	int add<int, int>(int var1, int __var21)
+	{
+	  return var1 + add(__var21);
+	}
+	#endif
+	
+
+	// Driver code
+int main()
+ {
+   std::cout.operator<<(add(1, 2, 3, 4)).operator<<(std::endl);
+   return 0;
+ }
+ 
