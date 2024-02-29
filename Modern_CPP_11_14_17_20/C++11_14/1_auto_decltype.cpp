@@ -70,5 +70,5 @@ int main()
 auto can not be used for function arguments:
 int add(auto x, auto y): ->wrong
 
-auto can not be used for derevative type:
+auto can not be used for type derivation:
 auto auto_arr[10] = {arr};
