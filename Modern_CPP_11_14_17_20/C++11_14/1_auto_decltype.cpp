@@ -65,7 +65,15 @@ int main()
 	cout<<sum(1, 1.8)<<endl;  //decltype is just checking the type of expression and same is returned.
 	cout<<sum(1.8, 1)<<endl;  //decltype is just checking the type of expression and same is returned.
 	return 0;
+} 
+
+problem: return type also required..
+template<typename R, typename T, typename U>
+R add(T x, U y) {
+return x+y;
 }
+
+solution is auto with decltype...
 
 auto can not be used for function arguments:
 int add(auto x, auto y): ->wrong
