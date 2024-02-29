@@ -1,5 +1,0 @@
-/*
-If constexpr statement: 
-
-
-*/
