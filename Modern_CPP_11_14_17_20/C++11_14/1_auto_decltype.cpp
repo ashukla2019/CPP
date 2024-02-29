@@ -66,3 +66,9 @@ int main()
 	cout<<sum(1.8, 1)<<endl;  //decltype is just checking the type of expression and same is returned.
 	return 0;
 }
+
+auto can not be used for function arguments:
+int add(auto x, auto y): ->wrong
+
+auto can not be used for derevative type:
+auto auto_arr[10] = {arr};
