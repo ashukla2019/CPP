@@ -75,7 +75,7 @@ public:
 	}
 };
 
-class mozo: Dominos
+class Dominos: Pizza
 {
 public:
 	preparePizza()
@@ -187,5 +187,5 @@ public:
 class fileUploader
 {
 public:
-		fileUploader(cloud& cl); //it depends on myCloud which is wrong...should depend on abstraction.
+		fileUploader(cloud& cl); 
 };
