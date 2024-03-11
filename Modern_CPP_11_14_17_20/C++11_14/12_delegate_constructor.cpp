@@ -1,6 +1,7 @@
 Delegate constructors: 
-C++11 introduces the concept of a delegate construct, which allows a constructor to call another
-constructor in a constructor in the same class, thus simplifying the code:
+C++11 introduces the concept of a delegate constructor, which allows a constructor to call another
+constructor in a constructor in the same class.
+thus simplifying the code:
 
 #include <iostream>
 class Base {
