@@ -185,4 +185,15 @@ int main()
 	  accesses no variables in the enclosing scope 
 */
 
+--------------------------------------------------------------
+Lambda capture initializers:
+This allows creating lambda captures initialized with arbitrary expressions. The name given to the captured value does not need to be related to any variables in the enclosing scopes and introduces a new name inside the lambda body. The initializing expression is evaluated when the lambda is created (not when it is invoked).
 
+int factory(int i) { return i * 10; }
+auto f = [x = factory(2)] { return x; }; // returns 20
+
+auto generator = [x = 0] () mutable {
+  // this would not compile without 'mutable' as we are modifying x on each call
+  return x++;
+};	
+	
