@@ -186,7 +186,12 @@ int main()
 */
 
 --------------------------------------------------------------
-If mutable/exception/constexpr specification used, Parameter list () becomes mandatory.
+	
+syntax: []()<mutable> <exception> <constexpr> <return_type>
+	{
+	
+	}
+	If mutable/exception/constexpr specification used, Parameter list () becomes mandatory.
 
 Capture Clause (Lambda Introducer)
 Lambdas can capture (copy) local variable of surrounding space. We can capture local variables by value or by reference.
