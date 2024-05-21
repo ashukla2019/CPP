@@ -86,23 +86,22 @@ public:
 Liskov substitution principal:
  It states that objects of a superclass should be able to be replaced with objects of a subclass without affecting the correctness of the program. In other words, a subclass should be able to be substituted for its parent class without causing any errors or unexpected behavior.
 class Bird {
-public:
-  virtual void fly() = 0;
+    public:
+        virtual void fly() = 0;
 };
 
-class Eagle : public Bird {
-public:
-  void fly() override;
-};
-
-class Penguin : public Bird {
-public:
-  void fly() override;
+class Crow : public Bird {
+    public:
+        void fly() override {
+            cout << "Crow is flying" << endl;
+        }
 };
 
 class Ostrich : public Bird {
-public:
-  void fly() override;
+    public:
+        void fly() override {
+            throw runtime_error("Penguins can't fly");
+        }
 };
 Now, let’s suppose that we have a function that takes a Bird object and makes it fly.
 
@@ -112,11 +111,9 @@ void makeBirdFly(Bird& bird) {
 According to the LSP, we should be able to pass any Bird subclass object to this function without affecting the correctness of the program. For example, we should be able to pass an Eagle object, a Penguin object, or an Ostrich object to this function.
 
 Eagle eagle;
-Penguin penguin;
 Ostrich ostrich;
 
-makeBirdFly(eagle); // okay, eagle can fly
-makeBirdFly(penguin); // error, penguin can't fly
+makeBirdFly(crow); // okay, eagle can fly
 makeBirdFly(ostrich); // error, ostrich can't fly
 As we can see, passing a Penguin or an Ostrich object to this function would result in an error because they cannot fly. Therefore, these classes do not adhere to the same behavior as their parent class, Bird, and violate the LSP.
 -----------------------------------------------------------------------------------------------
