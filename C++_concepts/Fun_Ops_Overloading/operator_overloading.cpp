@@ -6,6 +6,10 @@ private:
 	int x;
 public:
 	A():x(10){}
+	A(int x):x(x)
+	{
+		
+	}
 	friend ostream& operator<<(ostream& out, const A& a)
 	{
 		out<<a.x;
@@ -29,17 +33,24 @@ public:
 	{
 		return *this;
 	}
+	int operator+(A a2)
+	{
+		return(x+a2.x);
+	}
 
 	
 };
 int main()
 {
 	A a,a1;
-	cout<<a; //will overload operator << from my class.
+	cout<<a; //will overload operator << from my class. will call cout.operator<<(a)
 	cin >> a; //will overload operator >> from my class.
 	a+5; //will overload + operator(a1.operator+(int))
 	a.printvalue();
-	a1 = a;
+	a1=a;
+	a.printvalue();
 	a1.printvalue();
+	A a2 = a+a1;
+	a2.printvalue();
 	return 0;
 }
