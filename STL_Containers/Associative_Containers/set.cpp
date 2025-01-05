@@ -78,7 +78,7 @@ prefer vector:
 
 int main ()
 {
-	/****************Initializations***********************/
+	/****************Create/Initializations***********************/
 		//initialize vector with default values
 		//set<int>s(5); //not possible
 		
@@ -89,16 +89,8 @@ int main ()
 		set<int>s = {10, 20, 30, 40,20};
 		
 		set<char> myset(str.begin(), str.end());
-		
-	/**************Add/Insert***********************************/	
-		// insert some values:
-		for (int i=1; i<10; i++) myset.insert(i*10);  // 10 20 30 40 50 60 70 80 90
 
-		it = myset.begin();
-		++it;                                         // "it" points now to 20
-		
-		
-	/************Access****************************/
+	/************Read/Access****************************/
 		//To access a particular index, you can use this :
 		 // using next() function
                 auto it = next(s.begin(), n);
@@ -110,6 +102,15 @@ int main ()
 	           // Initializing iterator
                     auto it = s.begin();
                     advance(it,n);
+		
+	/**************Add/Insert***********************************/	
+		// insert some values:
+		for (int i=1; i<10; i++) myset.insert(i*10);  // 10 20 30 40 50 60 70 80 90
+
+		it = myset.begin();
+		++it;                                         // "it" points now to 20
+		
+	
 	/************Remove data*****************************/
 		myset.erase (it); //erase by position
 
