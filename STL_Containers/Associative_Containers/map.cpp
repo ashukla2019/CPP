@@ -60,7 +60,7 @@ using namespace std;
 
 int main()
 {
-	/****************Initializations***********************/
+	/****************Create/Initializations***********************/
 		/*
 		map<char,int> first;
 	  
@@ -75,7 +75,10 @@ int main()
 		{
 			cout << it->first << " => " << it->second << '\n';
 		}
-	
+
+	/************Access****************************/
+		//can access element using .at or []
+		//cout<<first.at('a')<<endl;
 	/**************Add/Insert***********************************/
 		//Inserting data with insert member function.
 
@@ -90,9 +93,6 @@ int main()
 			cout << it->first << " => " << it->second << '\n';
 		}
 		
-	/************Access****************************/
-		//can access element using .at or []
-		//cout<<first.at('a')<<endl;
 	
 	/************Remove data*****************************/
 		// function to erase given keys
