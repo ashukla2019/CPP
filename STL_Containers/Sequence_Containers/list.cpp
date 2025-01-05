@@ -50,7 +50,7 @@ using namespace std;
 
 int main()
 {
-	/****************Initializations***********************/
+	/****************Create/Initializations***********************/
 		//initialize list with default values
 		//list<int>lt(5);
 		
@@ -63,18 +63,8 @@ int main()
 		//initialize list with other container
 		//string str("Hello");
 		//list<char>lt(str.begin(), str.end());
-		
-		
-	/**************Add***********************************/
-		//push_back and push_front
-		//lt.push_front(11);
-		//lt.push_back(18);
-	        // using insert to insert
-                // 2 element at the 4th position
-                // inserts 2 occurrences
-                // of 7 at 4th position
-                list1.insert(it, 2, 7);
-	/************Access****************************/
+
+	/************Read/Access****************************/
                 front() - returns the first element of the list
                 back() - returns the last element of the list
                 // display the first element
@@ -93,6 +83,17 @@ int main()
 		{
 			cout<<"values in list:"<<*it<<endl;
 		}*/
+		
+	/**************Add/Update***********************************/
+		//push_back and push_front
+		//lt.push_front(11);
+		//lt.push_back(18);
+	        // using insert to insert
+                // 2 element at the 4th position
+                // inserts 2 occurrences
+                // of 7 at 4th position
+                list1.insert(it, 2, 7);
+	
 	
 	/************Remove data*****************************/
                  1) pop_front() - removes the element at the beginning of the list
