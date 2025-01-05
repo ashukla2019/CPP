@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-	/****************Initializations***********************/
+	/****************Create/Initializations***********************/
 		//initialize list with default values
 		//deque<int>dq(5);
 		
@@ -14,17 +14,17 @@ int main()
 		
 		//initialize list with initializer list
 		deque<int>dq = {10, 20, 30, 40, 20};
+
+	/************Read/Access****************************/
+      		front() - returns the first element at front
+       		back() - returns the last element at back
+       		at() - returns element at the specified inde
 				
 	/**************Add***********************************/
 		//push_back and push_front
 		//dq.push_front(11);
 		//dq.push_back(18);
 	      
-	/************Access****************************/
-      front() - returns the first element at front
-       back() - returns the last element at back
-       at() - returns element at the specified inde
-  	
 	/************Remove data*****************************/
                  1) pop_front() - removes the element at the front
                  2) pop_back() - removes the element at the back
