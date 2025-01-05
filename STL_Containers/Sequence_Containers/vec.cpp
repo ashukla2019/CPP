@@ -88,7 +88,7 @@ using namespace std;
 
 int main()
 {
-	/****************Initializations***********************/
+	/****************Creation***********************/
 		//initialize vector with default values
 		//vector<int>vec(5);
 		
@@ -101,6 +101,13 @@ int main()
 		//initialize vector with other container
 		//string str("Hello");
 		//vector<char>vec(str.begin(), str.end());
+
+	/************Read/Access****************************/
+		//vector::at()
+		vec.at(3);
+	        Like an array, we can also use the square brackets [] to access vector elements. For example,
+                vector<int> num {1, 2, 3};
+                cout << num[1];  // Output: 2
 		
 	/**************Add/Insert***********************************/
 	        push_back() invokes copy/move on the supplied object; emplace_back() constructs in place. 
@@ -109,19 +116,13 @@ int main()
 		
 		//Insert element in vector:
 		//vec.insert(vec.begin(), 7);
-			
-	/************Access****************************/
-		//vector::at()
-		vec.at(3);
-	        Like an array, we can also use the square brackets [] to access vector elements. For example,
-                vector<int> num {1, 2, 3};
-                cout << num[1];  // Output: 2
 
-	/************Change data****************************/
-	       We can change an element of the vector using the same at() function.
+		#We can change an element of the vector using the same at() function.
 	       // change elements at indexes 1 and 4
                num.at(1) = 9;
                num.at(4) = 7;	
+	
+
 	/************Remove data*****************************/
 		//vec.pop_back();
 		//iterate in reverse order:
