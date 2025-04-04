@@ -24,12 +24,13 @@ class Person
        
 };
 
+template<typename T>
 class SP
 {
 private:
-    Person*    pData; // pointer to person class
+    T*    pData; // pointer to person class
 public:
-    SP(Person* pValue) : pData(pValue)
+    SP(T* pValue) : pData(pValue)
     {
     }
     ~SP()
@@ -38,12 +39,12 @@ public:
         delete pData;
     }
 
-    Person& operator* ()
+    T& operator* ()
     {
         return *pData;
     }
 
-    Person* operator-> ()
+    T* operator-> ()
     {    
         return pData;
     }
@@ -52,7 +53,8 @@ public:
 
 int main()
 {
-    SP p(new Person(const_cast<char*>("Scott"), 25));
-    p->Display(); //p.operator-> => pData.Display()
+    SP<Person>p(new Person(const_cast<char*>("Scott"), 25));
+    //SP p(new Person(const_cast<char*>("Scott"), 25));
+    p->Display();
     //delete pPerson;
 }
