@@ -100,7 +100,16 @@ we can write parameter list with lambda
 
 3.mutable specification (Optional)
 
-By default we can not change variable captured by value (because internally lambda is implemented through function object having const function call operator overloaded, and we can not change class variable in const functions) but with mutable keyword we can change variables which are captured by value. Please note any change in captured by value variable will not be reflected outside of lambda in contrary any change in captured by reference variable will be reflected outside of lambda.
+By default we can not change variable captured by value 
+(because internally lambda is implemented through function object having const function call operator 
+overloaded, and we can not change class variable in const functions) but with mutable keyword we can 
+change variables which are captured by value. Please note any change in captured by value variable will 
+not be reflected outside of lambda in contrary any change in captured by reference variable will be 
+reflected outside of lambda.
+ // function object implementation using Overloaded const function call operator
+    void operator()(int value) const {
+        std::cout << value << " ";
+    }
 
 int variable = 10;
 [variable] () mutable { 
