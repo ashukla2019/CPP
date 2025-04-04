@@ -6,187 +6,42 @@ The state of a functor can be initialized at construction.
 
 function pointer can not have additional value/state:
 */
-class fun
-{
-	int value;
-	public:
-		fun(int value):value(value){}
-		void operator ()(int x)
-		{
-			if(value < x)
-			cout<<"value ="<<x<<endl;
-		}
-};
-
-int main()
-{
-	fun f(10); //passing additional value and will be stored into data member
-    f(20);
-    return 0;
-}
-
 void print(int val)
 {
-    cout<<"val="<<val<<"\n";
+    cout << "val:" << val << endl;
 }
+
+class printVal
+{
+    int val;
+public:
+    printVal() = default;
+    printVal(int val):val(val){}
+    void operator()(int x) {
+        if (x > val)
+            cout << "value greater than default set value" << x << endl;
+    }
+};
+
 
 int main()
 {
-    vector<int>vec{10, 20, 30, 40};
-    for_each(vec.begin(), vec.end(), print); //we can pass only parameter but not additional value.
+    vector<int>vec{ 10, 20, 30, 40 };
+    //using function pointer
+    void (*func_ptr)(int) = &print;
+    for_each(vec.begin(), vec.end(), func_ptr);
+    //Using normal function
+    for_each(vec.begin(), vec.end(), print);
+    //We can not pass additional variable or state using function or function pointer
+    //we should functor:
+    printVal p(10);
+    for_each(vec.begin(), vec.end(), p);
     return 0;
 }
 
-#include<iostream>
-#include <vector>
-#include<algorithm>	
-using namespace std;
-
-//Implemented functor using struct multiply
-
-struct multiply
-{
-	private:
-	int factor;
-	public:
-	multiply(){}
-	multiply(int x):factor(x){}
-	void operator()(int y)
-	{
-		cout<<"Multiplied vector values:"<<factor*y<<endl;
-	}
-	
-};
-
-//Implemented functor using class multiply
-
-class multiply
-{
-	private:
-		int factor;
-	public:
-	multiply(){}
-	multiply(int x):factor(x){}
-	void operator()(int y)
-	{
-		cout<<"Multiplied vector values:"<<factor*y<<endl;
-	}
-	
-};
-
-------------------------------------Lambda Function--------------------------------------
-int main()
-{
-	vector<int>vec = {1,2,3,4};
-	int factor = 2;
-	//for_each(vec.begin(), vec.end(), multiply(2)); //calling functor(multiply(x)--> value will be passed to constructor)
-	//using lambda function
-	for_each(vec.begin(), vec.end(), [factor](int y){ //[] will take local variable and () will take vector values
-	cout<<"Multiplied vector values:"<<factor*y<<endl;});
-	return 0;
-}
-//A 'Lambda' function: A lambda is an unnamed function that is useful (in actual programming, not theory) 
-//for short snippets of code that are impossible to reuse and are not worth naming.
-
-syntax: [ capture clause ] (parameters) -> return-type //return type is evaluated by compiler 
-		{   
-			definition of method   
-		} 
-
-int main()
-  {
-      auto sum = [](int x, int y) { return x + y; };
-      cout << sum(5, 2) << endl;
-      cout << sum(10, 5) << endl;
-  }
-
-//C++ 14 provided generic lambda, suppose you want to have sum function for integer/float etc.
-[](auto a, auto b) { return a + b; }
-
-int main() 
-{ 
-  
-    // Declare a generalized lambda and store it in sum 
-    auto sum = [](auto a, auto b) { 
-        return a + b; 
-    }; 
-  
-    // Find sum of two integers 
-    cout << sum(1, 6) << endl; 
-  
-    // Find sum of two floating numbers 
-    cout << sum(1.0, 5.6) << endl; 
-  
-    // Find sum of two strings 
-    cout << sum(string("Geeks"), string("ForGeeks")) << endl; 
-  
-    return 0; 
-} 
-
-/*
-	  A lambda expression can have more power than an ordinary function by having 
-	  access to variables from the enclosing scope. We can capture external variables
-	  from enclosing scope by three ways : 
-      Capture by reference 
-      Capture by value 
-      Capture by both (mixed capture)
-	  Syntax used for capturing variables : 
-      [&] : capture all external variable by reference--->
-			
-			int main()
-			{
-   			   int i = 3;
-			   int j = 5;
-
-			   // The following lambda expression captures i by value and
-			   // j by reference.
-			   function<int (void)> f = [&i, &j] { return i + j; };
-
-			   // Change the values of i and j.
-			   i = 22;
-			   j = 44;
-
-			   // Call f and print its result.
-			   cout << f() << endl;
-			} O/P: 66
-		
-      [=] : capture all external variable by value--->
-			
-			int main()
-			{
-				int i = 3;
-				int j = 5;
-
-				// The following lambda expression captures all external values
-				auto f = [=] { return i + j; };
-
-				// Call f and print its result.
-				cout << f() << endl;
-}
-			
-      [a, &b] : capture a by value and b by reference--->
-				int main()
-				{
-					int i = 3;
-					int j = 5;
-
-					// The following lambda expression captures i by value and
-					// j by reference.
-					function<int (void)> f = [i, &j] { return i + j; };
-					// Change the values of i and j.
-					i = 22;
-					j = 44;
-					// Call f and print its result.
-					cout << f() << endl;
-				}
-				O/P: 47
-				
-	  An empty capture clause, [ ] , indicates that the body of the lambda expression 
-	  accesses no variables in the enclosing scope 
-*/
-
 --------------------------------------------------------------
-	
+Lambda function: C++ Lambda expression allows us to define anonymous function objects (functors) which can 
+either be used inline or passed as an argument.	
 syntax: []()<mutable> <exception> <constexpr> <return_type>
 	{
 	
