@@ -52,7 +52,7 @@ public:
 
 int main()
 {
-    SP p(new Person("Scott", 25));
-    p->Display();
+    SP p(new Person(const_cast<char*>("Scott"), 25));
+    p->Display(); //p.operator-> => pData.Display()
     //delete pPerson;
 }
