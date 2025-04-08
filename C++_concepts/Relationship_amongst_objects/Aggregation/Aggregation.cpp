@@ -34,7 +34,7 @@ int main()
 {
 	Car c ("BMW", 134);
 	Person *p = new Person("Ankit", &c);
-	delete p;
+	delete p; //It will delete only person object but Car object will not be deleted.
 	c.printCarInfo();
 	return 0;
 }
