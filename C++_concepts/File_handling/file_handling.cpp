@@ -1,47 +1,64 @@
 #include <iostream>
-#include <fstream> 
-
-/* fstream header file for ifstream, ofstream,
-fstream classes */
+#include <fstream>
+#include <vector>
 using namespace std;
+/*
+                    +------------------------+
+                    |   ios                   |
+                    +------------------------+
+                             |
+                             |
+              +---------------------------+
+              |                           |
+       +--------------+            +-----------------+
+       |  istream     |            |   ostream       |
+       +--------------+            +-----------------+
+            |                           |
+            |                           |
+    +---------------+          +-----------------+
+    |   ifstream    |          |    ofstream     |
+    +---------------+          +-----------------+
+            |                           |
+    +---------------+          +-----------------+
+    |   filebuf     |          |    filebuf      |
+    +---------------+          +-----------------+
+*/
 
-int main()
-{
-	// Creation of ofstream class object
-	ofstream fout;
-	string line;
-	// by default ios::out mode, automatically deletes
-	// the content of file. To append the content, open in ios:app
-	// fout.open ("sample.txt", ios::app)
-	fout.open("sample.txt");
-	// Execute a loop If file successfully opened
-	while (fout) 
-	{
-		// Read a Line from standard input
-		getline(cin, line);
-		// Press 1 to exit
-		if (line == "1")
-		{
-			break;
-		}
-		// Write line in file
-		fout << line << endl;
-	}
-	// Close the File
-	fout.close();
-	// Creation of ifstream class object to read the file
-	ifstream fin;
-	// by default open mode = ios::in mode
-	fin.open("sample.txt");
-	// Execute a loop until EOF (End of File)
-	while (fin)
-	{
-		// Read a Line from File
-		getline(fin, line);
-		// Print line in Console
-		cout << line << endl;
-	}
-	// Close the file
-	fin.close();
-	return 0;
+class FileWriter {
+public:
+    void writeToFile(string filename, string data) {
+        ofstream file(filename);
+        file << data;
+        file.close();
+    }
+};
+
+class FileReader {
+public:
+    vector<string> readFromFile(string filename) {
+        vector<string> data;
+        string line;
+        ifstream file(filename);
+        while (getline(file, line)) {
+            data.push_back(line);
+        }
+        file.close();
+        return data;
+    }
+};
+
+class FileManager : public FileReader, public FileWriter {
+
+};
+
+int main() {
+    FileManager file_manager;
+    file_manager.writeToFile("data.txt", "Hello, World!");
+
+    vector<string> data = file_manager.readFromFile("data.txt");
+    for (string line : data) {
+        cout << line << endl;
+    }
+
+    return 0;
 }
