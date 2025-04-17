@@ -2,7 +2,8 @@
 using namespace std;
 
 // function to check for integar value
-template <typename C> void printInfo(const C& value)
+template <typename C> 
+void printInfo(const C& value)
 {
     // if the value is not integer, the if block will be
     // discarded
