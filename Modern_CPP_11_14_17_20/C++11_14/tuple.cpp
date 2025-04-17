@@ -133,3 +133,48 @@ int main() {
 
     return 0;
 }
+--------------------------------------------------------------------------------------------------
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+
+
+int main() {
+   //Creating/Initializing tuples:
+        tuple<int, int, string>tup1{ 1,2,"AB"};
+        tuple<int, int, string>tup2(make_tuple(3, 4, "CD"));
+
+        //Dynamically allocated tuple:
+        auto* t = new std::tuple<int, std::string>(1, "hello");
+
+    //Access/Read tuple:
+        cout << get<0>(tup1) << endl;
+        cout << get<1>(tup1) << endl;
+        cout << get<2>(tup1) << endl;
+
+        //Accessing/reading/unpacking/extracting by using tie
+        int a, b;
+        string s;
+        tie(a, b, s) = tup2;
+        cout <<a << endl;
+        cout << b << endl;
+        cout << s << endl;
+
+    //Update tuple value:
+        get<0>(tup1) = 10;
+        cout << get<0>(tup1) << endl;
+
+        vector<tuple<int, int, string>>vect;
+        vect.push_back(make_tuple(10, 20, "ABC"));
+        for (auto [X, Y, Z] : vect)
+        {
+            std::cout << X << " " << Y << " " << Z << std::endl;
+        }
+
+
+   return 0;
+}
