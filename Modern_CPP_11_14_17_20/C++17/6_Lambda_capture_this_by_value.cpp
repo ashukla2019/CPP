@@ -1,6 +1,15 @@
 Lambda capture this by value
 Capturing this in a lambda's environment was previously reference-only. An example of where this is problematic is asynchronous code using callbacks that require an object to be available, potentially past its lifetime. *this (C++17) will now make a copy of the current object, while this (C++11) continues to capture by reference.
 
+-------------------------------------------------------------------------------------------
+[this]	Captures the pointer (this) -> we can modify the class member and will be visibile outside lambda with updated value
+[*this]	Captures a copy of the object (C++17+) -> we can modify the class member if declared with mutable but not will be visibile outside lambda with updated value
+[=] or [&]	Captures everything by value or reference
+
+ // capture 'this' by value [this] =>(actually copies the pointer)
+// Capture a copy of the object  [*this] =>(actually copies the pointer)
+-----------------------------------------------------------------------------------------------
+	
 // C++ Program to illustrate by value capture of *this 
 // in lambda expressions 
 #include <iostream> 
