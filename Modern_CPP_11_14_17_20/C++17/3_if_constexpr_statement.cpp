@@ -1,38 +1,24 @@
-/*
-If constexpr statement:  C++17 introduces the constexpr keyword into the if statement,
-allowing you to declare the condition of a constant expression in your code. Consider the following code:
-
 #include <iostream>
-template<typename T>
-auto print_type_info(const T& t) 
+using namespace std;
+
+// function to check for integar value
+template <typename C> void printInfo(const C& value)
 {
-  if constexpr (std::is_integral<T>::value) 
-  {
-    return t + 1;
-  } 
-  else 
-  {
-    return t + 0.001;
-  }
-}
-int main() {
-std::cout << print_type_info(5) << std::endl;
-std::cout << print_type_info(3.14) << std::endl;
+    // if the value is not integer, the if block will be
+    // discarded
+    if constexpr (is_integral_v<C>) {
+        cout << "Integer Value " << value << endl;
+    }
+    // if the value is integer, the else block will be
+    // discarded
+    else {
+        cout << "Non-Integer value:" << value << endl;
+    }
 }
 
-At compile time, the actual code will behave as follows:
-int print_type_info(const int& t) 
+// driver code
+int main()
 {
-return t + 1;
+    printInfo(10.0);
+    printInfo(3.15);
 }
-double print_type_info(const double& t) 
-{
-return t + 0.001;
-}
-int main() {
-std::cout << print_type_info(5) << std::endl;
-25
-2.5 Templates CHAPTER 02: LANGUAGE USABILITY ENHANCEMENTS
-std::cout << print_type_info(3.14) << std::endl;
-}
-*/
