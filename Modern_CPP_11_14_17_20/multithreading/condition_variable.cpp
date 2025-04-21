@@ -15,40 +15,37 @@ NOTES:
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-using namespace std;
 
-int balance = 0;
-mutex mutex_balance;
-condition_variable cv;
+std::mutex mtx;
+std::condition_variable cv;
+bool ready = false;
 
-void withdrawMoney(int money)
-{
-    unique_lock<mutex>ul(mutex_balance);
-    cv.wait(ul, []{return (balance !=0) ? true: false;});
-    if(balance >= money)
-    {
-        balance-=money;
-        cout<<"Amount deducted and current balance"<<balance;
-    }
-    else
-    {
-        cout<<"Amount is not sufficient\n";
-    }
+void worker_thread() {
+    std::unique_lock<std::mutex> lock(mtx);
+    std::cout << "Worker: Waiting for signal...\n";
+
+    // Wait until "ready" becomes true
+    cv.wait(lock, [] { return ready; });
+
+    std::cout << "Worker: Received signal, proceeding...\n";
 }
 
-void addMoney(int money)
-{
-    lock_guard<mutex>lg(mutex_balance);
-    balance+= money;
-    cout<<"Current balance:"<<balance;
+void signal_thread() {
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // Simulate work
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        ready = true;
+        std::cout << "Signal: Setting ready = true and notifying.\n";
+    }
     cv.notify_one();
 }
 
-int main()
-{
-    thread t1(withdrawMoney, 500);
-    thread t2(addMoney, 500);
+int main() {
+    std::thread t1(worker_thread);
+    std::thread t2(signal_thread);
+
     t1.join();
     t2.join();
+
     return 0;
 }
