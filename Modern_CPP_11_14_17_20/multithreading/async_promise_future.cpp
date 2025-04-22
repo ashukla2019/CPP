@@ -4,20 +4,21 @@ the result.
 #include <iostream>
 #include <future>
 
+
 //With std::launch::async:
 
-//The function runs asynchronously in a separate thread.
+    //The function runs asynchronously in a separate thread.
 
-//get() will block until the function completes.
+    //get() will block until the function completes.
 
 //With std::launch::deferred:
 
-//The function runs synchronously(on the calling thread) when get() is called.
+    //The function runs synchronously(on the calling thread) when get() is called.
 
-//No separate thread is created.
+    //No separate thread is created.
 
-//get() will block until the function finishes, but since it runs on the same thread, the blocking is just 
-//waiting for the function to complete.
+    //get() will block until the function finishes, but since it runs on the same thread, the blocking is just 
+    //waiting for the function to complete.
 
 //std::future: is an object that acts as a placeholder for a result that will be computed asynchronously.
 
