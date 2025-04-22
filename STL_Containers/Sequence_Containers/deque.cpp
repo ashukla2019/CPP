@@ -48,26 +48,4 @@ int main()
 		}*/
 	
 		//lt.erase(lt.begin(), lt.begin()); //by position range	
-		//iterate list 
-		/*for(auto it = lt.begin(); it != lt.end(); it++)
-		{
-			cout<<"values in list:"<<*it<<endl;
-		}*/
-	
-		//Find element:
-		/*
-		int x = 20;
-		auto it = find(lt.begin(), lt.end(), x);
-		if(it != lt.end())
-		{
-			cout<<*it<<endl;
-		}
-		else
-		{
-			cout<<"No found"<<endl;
-		}
-		*/
-	
-	
-	return 0;
-}
+
