@@ -4,7 +4,6 @@ the result.
 #include <iostream>
 #include <future>
 
-
     1. std::launch::async(Asynchronous Launch)
        Behavior: The function you pass to std::async is executed immediately in a separate thread.
 
@@ -26,6 +25,12 @@ the result.
     //.get() retrieves the result and blocks if not ready.
     //.wait() just blocks until ready(without retrieving the value).
     //.valid() checks if the future still holds a result.
+
+Why is std::async still considered asynchronous?
+Even though .get() waits for the result, the task was still run asynchronously because it was launched on a 
+separate thread. This separation of concerns—execution being asynchronous (in a separate thread) 
+and retrieving the result being synchronous (blocking until the result is available)—is what makes 
+std::async asynchronous.
 
 int compute() {
     return 42;
