@@ -5,26 +5,27 @@ the result.
 #include <future>
 
 
-//With std::launch::async:
+    1. std::launch::async(Asynchronous Launch)
+       Behavior: The function you pass to std::async is executed immediately in a separate thread.
 
-    //The function runs asynchronously in a separate thread.
+        std::future::get() :  Calling.get() will block until the asynchronous operation(running on a separate thread)
+        finishes and provides a result.
 
-    //get() will block until the function completes.
+        The thread that executes the function is created and managed automatically by the C++ runtime, 
+        and get() waits for the result from that thread.
 
-//With std::launch::deferred:
+    2. std::launch::deferred(Deferred Launch)
+        Behavior: The function you pass to std::async does not execute immediately.Instead, it is deferredand will only
+        be executed when you call.get() or .wait() on the std::future.
 
-    //The function runs synchronously(on the calling thread) when get() is called.
+        std::future::get() :  Calling.get() will trigger the execution of the deferred task synchronously on the same thread that calls get().
+        The computation is not asynchronous in this case — it runs synchronously in the calling thread only when get() is invoked.
+    
+    3.  std::future: is an object that acts as a placeholder for a result that will be computed asynchronously.
 
-    //No separate thread is created.
-
-    //get() will block until the function finishes, but since it runs on the same thread, the blocking is just 
-    //waiting for the function to complete.
-
-//std::future: is an object that acts as a placeholder for a result that will be computed asynchronously.
-
-//.get() retrieves the resultand blocks if not ready.
-//.wait() just blocks until ready(without retrieving the value).
-//.valid() checks if the future still holds a result.
+    //.get() retrieves the result and blocks if not ready.
+    //.wait() just blocks until ready(without retrieving the value).
+    //.valid() checks if the future still holds a result.
 
 int compute() {
     return 42;
