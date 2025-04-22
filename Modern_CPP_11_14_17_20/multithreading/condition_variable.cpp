@@ -16,36 +16,43 @@ NOTES:
 #include <mutex>
 #include <condition_variable>
 
-std::mutex mtx;
-std::condition_variable cv;
-bool ready = false;
+using namespace std;
 
-void worker_thread() {
-    std::unique_lock<std::mutex> lock(mtx);
-    std::cout << "Worker: Waiting for signal...\n";
+int balance = 0;
+mutex mt;
+condition_variable cv;
 
-    // Wait until "ready" becomes true
-    cv.wait(lock, [] { return ready; });
-
-    std::cout << "Worker: Received signal, proceeding...\n";
+void increment()
+{
+	//lock_guard<mutex>lg(mt);
+	unique_lock<mutex>ul(mt);
+	for (int i = 1; i < 50; i++)
+	{
+		balance = balance + i;
+		cout << "balance after increment is=" << balance << endl;
+	}
+	cv.notify_one();
 }
 
-void signal_thread() {
-    std::this_thread::sleep_for(std::chrono::seconds(1)); // Simulate work
-    {
-        std::lock_guard<std::mutex> lock(mtx);
-        ready = true;
-        std::cout << "Signal: Setting ready = true and notifying.\n";
-    }
-    cv.notify_one();
+void decrement()
+{
+	//lock_guard<mutex>lg(mt);
+	unique_lock<mutex>ul(mt);
+	cv.wait(ul, [] { return balance > 0; });
+	for (int i = 1; i < 50; i++)
+	{
+		balance = balance - i;
+		cout << "balance after decrement is=" << balance << endl;
+	}
 }
 
-int main() {
-    std::thread t1(worker_thread);
-    std::thread t2(signal_thread);
+int main()
+{
+	thread t1(decrement);
+	thread t2(increment);
+	t1.join();
+	t2.join();
 
-    t1.join();
-    t2.join();
+	return 0;
 
-    return 0;
 }
