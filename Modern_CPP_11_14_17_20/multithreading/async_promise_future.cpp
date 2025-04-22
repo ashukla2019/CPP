@@ -49,3 +49,16 @@ int main() {
 
 //std::promise is used to communicate data between threads.It allows one thread(the producer) to send a value or
 //an exception to another thread(the consumer) through a std::future
+
+
+
+std::async(std::launch::async, ...) vs. std::thread
+
+Feature	std::async(std::launch::async, ...)	Vs                         std::thread
+Thread creation	Yes (usually creates a new thread)	                   Yes (explicitly creates a thread)
+Automatic thread management	✅ Yes	                                   ❌ No (you must join() or detach())
+Returns result	✅ Yes, via std::future	                           ❌ No built-in return value
+Exception handling ✅ Automatically captured by future	               ❌ You must handle them yourself
+Synchronization	✅ Built-in via future::get()	                       ❌ Manual (mutex, condition_variable)
+Launch policy control	Can defer or force async	                   Always async (thread starts immediately)
+Destruction behavior: Waits on .get() or in destructor (if not called) You must call join() or detach() yourself
