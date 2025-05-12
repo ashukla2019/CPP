@@ -15,10 +15,15 @@ int main()
 		//initialize list with initializer list
 		deque<int>dq = {10, 20, 30, 40, 20};
 
+		//Using other containers:
+		std::vector<int> vec = {10, 20, 30};
+                std::deque<int> dq(vec.begin(), vec.end());
+
 	/************Read/Access****************************/
       		front() - returns the first element at front
        		back() - returns the last element at back
        		at() - returns element at the specified inde
+		dq[1] - Random access
 				
 	/**************Add***********************************/
 		//push_back and push_front
