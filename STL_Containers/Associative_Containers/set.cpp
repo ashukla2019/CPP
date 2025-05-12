@@ -79,12 +79,6 @@ prefer vector:
 int main ()
 {
 	/****************Create/Initializations***********************/
-		//initialize vector with default values
-		//set<int>s(5); //not possible
-		
-		//initialize vector with same values
-		//set<int>s(5, 10); //not possible
-		
 		//initialize set with initializer list
 		set<int>s = {10, 20, 30, 40,20};
 		
