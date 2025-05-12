@@ -35,6 +35,7 @@
 	}
 	//Don't use auto: when type conversion is needed...
 
+5) When want function return type same as expression:
 //Decltype: It checks the type of expression
 #include<iosteam>
 using namespace std;
