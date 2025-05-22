@@ -1,3 +1,5 @@
+
+
 std::async: runs a function asynchronously (potentially on a separate thread) and returns a std::future to retrieve
 the result.
 
@@ -50,8 +52,76 @@ int main() {
 //std::promise is used to communicate data between threads.It allows one thread(the producer) to send a value or
 //an exception to another thread(the consumer) through a std::future
 
+Ex:
+#include <iostream>
+#include <future>
+#include <stdexcept>
+#include <chrono>
+
+int divide(int a, int b) {
+    if (b == 0) {
+        throw std::runtime_error("Division by zero!");
+    }
+    return a / b;
+}
+
+int main() {
+    try {
+        // Start async task with exception
+        std::future<int> result = std::async(std::launch::async, divide, 10, 0);
+        
+        // Get the result (this will throw the exception)
+        int value = result.get();
+        std::cout << "Result: " << value << std::endl;
+    }
+    catch (const std::exception& e) {
+        // Handle exception thrown by the async task
+        std::cout << "Caught an exception: " << e.what() << std::endl;
+    }
+
+    return 0;
+}
 
 
+-----------------------------------------------------------------------------------------------  
+can we use promise with async
+
+Yes, you can use std::promise with std::async, but usually you don’t need to — because std::async already returns 
+a std::future that gives you the result of the asynchronous task automatically.
+
+However, there are valid reasons to combine std::promise with std::async, especially in more complex workflows, 
+such as:
+
+Sharing a result across multiple threads
+Setting a result manually from somewhere else
+Handling multi-threaded pipelines
+
+Ex:
+#include <iostream>
+#include <thread>
+#include <future>
+
+void async_work(std::promise<int> prom) {
+    // Simulate some work
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    prom.set_value(42);  // Set the result
+}
+
+int main() {
+    std::promise<int> prom;
+    std::future<int> fut = prom.get_future();
+
+    // Pass the promise to async task
+    std::async(std::launch::async, async_work, std::move(prom));
+
+    std::cout << "Waiting for result...\n";
+    int result = fut.get();  // Will wait until prom.set_value is called
+    std::cout << "Result: " << result << std::endl;
+}
+
+
+
+------------------------------------------------------------------------------------------------------
 std::async(std::launch::async, ...) vs. std::thread
 
 Feature	std::async(std::launch::async, ...)	Vs                         std::thread
