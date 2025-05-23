@@ -118,8 +118,17 @@ int main() {
     int result = fut.get();  // Will wait until prom.set_value is called
     std::cout << "Result: " << result << std::endl;
 }
+------------------------------------------------------------------------------------------------
+Feature	future.get()	                               future.wait()
+Returns value	✅ Yes	                                ❌ No
+Invalidates	✅ Yes (future can't be reused)	        ❌ No
+Can rethrow exception	✅ Yes	                        ❌ No
+Can be called multiple times❌ No	                    ✅ Yes
 
+✅ When to Use Which?
+Use .get() when you need the result of the asynchronous operation.
 
+Use .wait() when you just want to wait for completion (e.g., before doing something else), but not yet retrieve the result.
 
 ------------------------------------------------------------------------------------------------------
 std::async(std::launch::async, ...) vs. std::thread
