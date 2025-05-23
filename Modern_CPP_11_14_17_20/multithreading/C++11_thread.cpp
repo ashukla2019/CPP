@@ -1,3 +1,6 @@
+Concurrency: You're cooking and answering emails by switching between the two quickly.
+Parallelism: You're cooking and someone else is answering emails at the same time.
+
 /*
 //Thread creation in C++11:
 In every C++ application there is one default main thread i.e. main() function. 
