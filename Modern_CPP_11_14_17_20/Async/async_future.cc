@@ -1,6 +1,3 @@
-
-
-
 std::async: runs a function asynchronously (potentially on a separate thread) and returns a std::future to retrieve
 the result.
 
