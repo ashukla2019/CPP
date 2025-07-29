@@ -10,191 +10,125 @@ public:
 	
 	//if we use initializer list, first memory will be allocated to object and actual value is assigned.
 };
-
-/*Prefer in-class member initializer over constant initializations OR over
-//default constructor.
-class A 
-{
-	string s = "def"; //in class member initialization
-	int i = 10; // in class member initialization
-public:
-	A(string val):s{val}{}
-	A()=default; //use compiler generated default constructor
-};
-
-Benefits: 
-No overhead of taking care of initializing constants separately in each constructor.
-Performance gain by using standard default constructors.
-
-*/
-
-
-//initializer list and uniform initialization: 
-  //uniform initialization: assignment operator is overhead: first resolve right hand side then
- //allocate memory. So need uniform way of initialization.
-
-	//Uniform initialization syntax:
-	std::vector<int> v { 1, 2, 3 };
-    std::map<int, std::string> m { {1, "one"}, { 2, "two" }};
-	int* arr2 = new int[3]{ 1, 2, 3 };  //dynamic allocated array.
-	int arr1[3] { 1, 2, 3 }; //array 
-	int i { 42 }; //Built-in types
-	//user defined types....
-	class foo
-        {
-          int a_;
-          double b_;
-        public:
-          foo():a_(0), b_(0) {}
-          foo(int a, double b = 0.0):a_(a), b_(b) {}
-        };
-
-        foo f1{}; 
-        foo f2{ 42, 1.2 }; 
-        foo f3{ 42 };
-         
-//uniform initialization search order:
-	//initializer_list constructor: myclass(const initializer_list<int>&v){}. all stl containers support it.
-	//regular constructor that takes appropriate parameters myclass(int x, int y, int z): follows member by member copy
-	//Aggregate initializer => myclass m ={1, 2, 3}; it does byte by byte copy
-	
-	class A
-	{
+------------------------------------------------------------------------------
+1. Member Initialization in Constructors
+	class MyClass {
+    	int x;
+    	double y;
 	public:
-		int mx;
-		double my;
+    	MyClass(int a, double b) : x(a), y(b) {}  // initializer list
 	};
-
-	class B
-	{
-	public:
-		B(int x, double y) : mx{ x }, my{ y } {}
-
-		int mx;
-		double my;
-	};
-
-	class C
-	{
-	public:
-		C(int x, double y) : mx{ x }, my{ y } {}
-		C(const std::initializer_list<int>& v) {
-			mx = *(v.begin());
-			my = *(v.begin() + 1);
-		}
-
-		int mx;
-		double my;
-	};
-
-	int main()
-	{
-		// Aggregate initialization
-		A a{ 1, 3.7 };
-
-		// Regular constructor
-		B b{ 2, 9.8 };
-
-		// Initializer_list
-		C c{ 3, 7 };
-
-		std::cout << a.mx << " " << a.my << std::endl;
-		std::cout << b.mx << " " << b.my << std::endl;
-		std::cout << c.mx << " " << c.my << std::endl;
-
-		return 0;
-	}
+---------------------------------------------------------------------------
+2. std::initializer_list<T> Constructor
 		
-	Ex: int *pi = new int[5]{1, 2, 3, 4, 5};
-	std::vector v1{1, 2};
+	#include <initializer_list>
+	#include <iostream>
 	
-	//Test code: 
-	
-	
-	// vector<int> vec{10,20,20}; //calling initializer list constructor. 
-	//Need not to store data using vec.push_back().
-	//we can create our own initializer list constructor
-	class myclass
-	//{
-	vector<int>m_vec;
+	class MyList {
 	public:
-		myclass(const initializer_list<int>&v)
-		{
-			for(initializer_list<int>::iterator itr = vec.begin(); itr != vec.end(); ++itr)
-			{
-				m_vec.push_back(*itr);
-			}
-		}
-
+	    MyList(std::initializer_list<int> values) {
+	        for (int v : values)
+	            std::cout << v << " ";
+	    }
 	};
-	int main()
-	{
-		myclass v {1,2,3,4};
+	
+	MyList ml = {1, 2, 3, 4};  // initializer_list constructor is called
+----------------------------------------------------------------
+3. Initializing STL Containers
+	#include <vector>
+	std::vector<int> vec = {1, 2, 3, 4};  // C++11 uniform initialization
+	Uniform initialization of std::vector, std::set, etc.
+-------------------------------------------------------------
+ 4. Function Parameters with std::initializer_list
+	void printAll(std::initializer_list<int> list) {
+    	for (int v : list)
+        std::cout << v << " ";
 	}
-	Use of initializer list: It is used when:
+	printAll({10, 20, 30});
+-------------------------------------------------------------------
+5. Aggregate Initialization (Plain Structs)
+	struct Point {
+    	int x, y;
+	};
+	Point p = {3, 4};  // aggregate initialization
+----------------------------------------------------------------------
+6. Constructor Delegation Using Initializer List
+	class MyClass {
+    	int a, b;
+	public:
+    	MyClass(int x) : MyClass(x, 0) {}       // delegate to another constructor
+    	MyClass(int x, int y) : a(x), b(y) {}
+	};
+--------------------------------------------------------------------------------------------------
+7) 7. Default Member Initializers (In-Class)
+	class MyClass {
+    	int x = 10;
+    	std::string name = "default";
+	};
+---------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+Use of initializer list: It is used when:
 	1)	To initialize reference variable
 	2)	To initialize const variable
 	3)	When object of one class is created in other class (required, otherwise default constructor of that class is called and if that is not implemented then there will be an error). 
-	Ex: 
-	class A 
-	{ 
-		int i,j; 
-	public: 
-		A(int, int ); 
-	}; 
-
-	A::A(int arg1, int arg2) { 
-		i = arg1; 
-		j = arg2;
-		cout << "A's Constructor called: Value of i: " << i << endl; 
-	} 
-
-	// Class B contains object of A 
-	class B { 
-		A a; 
-	public: 
-		B(int, int ); 
-	}; 
-
-	B::B(int x, int y): a(x, y){ //Initializer list must be used, otherwise it will try to call default constructor of class A.
-		cout << "B's Constructor called"; 
-	} 
-
-	int main() { 
-		B obj(10,20); 
-		return 0; 
-	}
-	4)	To initialize the members of Base class.
-	Ex:
-	#include <iostream> 
-	using namespace std; 
-
-	class A { 
-		int i; 
-	public: 
-		A(int ); 
-	}; 
-
-	A::A(int arg) { 
-		i = arg; 
-		cout << "A's Constructor called: Value of i: " << i << endl; 
-	} 
-
-	// Class B is derived from A 
-	class B: A { 
-	public: 
-		B(int ); 
-	}; 
-
-	B::B(int x):A(x) { //Initializer list must be used 
-		cout << "B's Constructor called"; 
-	} 
-
-	int main() { 
-		B obj(10); 
-		return 0; 
-	}
-	5)	To initialize base class data members if function parameter and data member are using same name.
-
+		Ex: 
+		class A 
+		{ 
+			int i,j; 
+		public: 
+			A(int, int ); 
+		}; 
 	
-	//Initialize member variables in initializer list in same order used in class.
+		A::A(int arg1, int arg2) { 
+			i = arg1; 
+			j = arg2;
+			cout << "A's Constructor called: Value of i: " << i << endl; 
+		} 
+
+		// Class B contains object of A 
+		class B { 
+			A a; 
+		public: 
+			B(int, int ); 
+		}; 
+	
+		B::B(int x, int y): a(x, y){ //Initializer list must be used, otherwise it will try to call default constructor of class A.
+			cout << "B's Constructor called"; 
+		} 
+	
+		int main() { 
+			B obj(10,20); 
+			return 0; 
+		}
+	4) To initialize the members of Base class.
+		Ex:
+		#include <iostream> 
+		using namespace std; 
+	
+		class A { 
+			int i; 
+		public: 
+		A(int ); 
+		}; 
+	
+		A::A(int arg) { 
+			i = arg; 
+			cout << "A's Constructor called: Value of i: " << i << endl; 
+		} 
+	
+		// Class B is derived from A 
+		class B: A { 
+		public: 
+			B(int ); 
+		}; 
+	
+		B::B(int x):A(x) { //Initializer list must be used 
+			cout << "B's Constructor called"; 
+		} 
+	
+		int main() { 
+			B obj(10); 
+			return 0; 
+		}
+	5) To initialize base class data members if function parameter and data member are using same name.
+		//Initialize member variables in initializer list in same order used in class.
