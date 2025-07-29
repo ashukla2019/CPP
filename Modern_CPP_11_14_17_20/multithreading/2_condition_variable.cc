@@ -14,128 +14,107 @@ NOTES:
 #include <iostream>
 #include <thread>
 #include <mutex>
-#include <condition_variable>
 
-using namespace std;
+std::mutex mtx;  // Mutex to ensure thread-safe access
 
-int balance = 0;
-mutex mt;
-condition_variable cv;
-
-void increment()
-{
-	//lock_guard<mutex>lg(mt);
-	unique_lock<mutex>ul(mt);
-	for (int i = 1; i < 50; i++)
-	{
-		balance = balance + i;
-		cout << "balance after increment is=" << balance << endl;
-	}
-	cv.notify_one();
+// Function to print even numbers
+void printEven(int& current) {
+    while (current <= 20) {
+        mtx.lock();  // Lock to ensure mutual exclusion
+        if (current % 2 == 0) {
+            std::cout << "even"<<current << " ";
+            current++;
+        }
+        mtx.unlock();  // Unlock after printing
+    }
 }
 
-void decrement()
-{
-	//lock_guard<mutex>lg(mt);
-	unique_lock<mutex>ul(mt);
-	cv.wait(ul, [] { return balance > 0; });
-	for (int i = 1; i < 50; i++)
-	{
-		balance = balance - i;
-		cout << "balance after decrement is=" << balance << endl;
-	}
+// Function to print odd numbers
+void printOdd(int& current) {
+    while (current <= 20) {
+        mtx.lock();  // Lock to ensure mutual exclusion
+        if (current % 2 != 0) {
+            std::cout << "odd" <<current << " ";
+            current++;
+        }
+        mtx.unlock();  // Unlock after printing
+    }
 }
 
-int main()
-{
-	thread t1(decrement);
-	thread t2(increment);
-	t1.join();
-	t2.join();
+int main() {
+    int current = 1;  // Start from 1
+    std::thread t1(printEven, std::ref(current));  // Thread for even numbers
+    std::thread t2(printOdd, std::ref(current));   // Thread for odd numbers
 
-	return 0;
+    t1.join();  // Wait for the even number thread to finish
+    t2.join();  // Wait for the odd number thread to finish
 
+    std::cout << std::endl;
+    return 0;
 }
 
-------------------------------------------------------------------------------------------------  
+What is does:
+Both threads constantly run and acquire the mutex.
+If it's not their turn (e.g., even thread sees an odd number), they just skip and loop again.
+This leads to busy-waiting: CPU cycles are wasted checking conditions rapidly.
+It can also lead to thread starvation or contention, especially under high CPU load.
+--------------------------------------------------------------------------------------------------------------------------------------  
 #include <iostream>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-#include <vector>
 
-class SharedBuffer {
-public:
-    SharedBuffer(size_t size) : buffer(size), write_pos(0), read_pos(0), count(0) {}
+using namespace std;
 
-    void write(char c) {
-        std::unique_lock<std::mutex> lock(mtx);
-        std::cout<<"count="<<count<<" "<<"buffer.size()" <<buffer.size()<<"\n";
-        // Wait until buffer has space
-        cv.wait(lock, [this]() { return count < buffer.size(); });
+mutex mt;
+condition_variable cv;
 
-        buffer[write_pos] = c;
-        write_pos = (write_pos + 1) % buffer.size();
-        ++count;
+bool isOddTurn = true;  // Start with odd number
 
-        // Notify reader
-        cv.notify_all();
-    }
+void printOdd(int& x)
+{
+    while (x < 50)
+    {
+        unique_lock<mutex> lock(mt);
+        cv.wait(lock, [&]() { return x % 2 != 0; });  // Wait for odd turn
 
-    char read() {
-        std::unique_lock<std::mutex> lock(mtx);
-        // Wait until buffer has data
-        std::cout<<"count="<<count<<"\n";
-        cv.wait(lock, [this]() { return count > 0; });
+        if (x >= 50) break;  // Re-check condition after wakeup
 
-        char c = buffer[read_pos];
-        read_pos = (read_pos + 1) % buffer.size();
-        --count;
-
-        // Notify writer
-        cv.notify_all();
-
-        return c;
-    }
-
-private:
-    std::vector<char> buffer;
-    size_t write_pos;
-    size_t read_pos;
-    size_t count;
-
-    std::mutex mtx;
-    std::condition_variable cv;
-};
-
-void writer(SharedBuffer& buf) {
-    std::string data = "Hello from writer!";
-    for (char c : data) {
-        buf.write(c);
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        cout << "Number printed by odd thread: " << x << endl;
+        x++;
+        cv.notify_all();  // Notify other thread
     }
 }
 
-void reader(SharedBuffer& buf) {
-    for (int i = 0; i < 18; ++i) {  // 18 chars in "Hello from writer!"
-        char c = buf.read();
-        std::cout << c;
-        std::cout.flush();
+void printEven(int& x)
+{
+    while (x < 50)
+    {
+        unique_lock<mutex> lock(mt);
+        cv.wait(lock, [&]() { return x % 2 == 0; });  // Wait for even turn
+
+        if (x >= 50) break;  // Re-check condition after wakeup
+
+        cout << "Number printed by even thread: " << x << endl;
+        x++;
+        cv.notify_all();  // Notify other thread
     }
-    std::cout << std::endl;
 }
 
-int main() {
-    SharedBuffer buffer(5);  // buffer size 5
+int main()
+{
+    int var = 1;
+    thread odd(printOdd, std::ref(var));
+    thread even(printEven, std::ref(var));
 
-    std::thread writer_thread(writer, std::ref(buffer));
-    std::thread reader_thread(reader, std::ref(buffer));
-
-    writer_thread.join();
-    reader_thread.join();
+    odd.join();
+    even.join();
 
     return 0;
 }
+❌ Without condition variable: Both are yelling "Is it my turn?!" repeatedly, wasting energy.
+✅ With condition variable: One person speaks, then says "Now it's your turn", and waits quietly.
+
 -------------------------------------------------------------------------------------------------------------
 #include <iostream>
 #include <thread>
