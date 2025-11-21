@@ -1,3 +1,6 @@
+Subclass objects should be replaceable for base class objects without breaking the program.
+
+
 class Bird {
     public:
         virtual void fly() = 0;
