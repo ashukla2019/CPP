@@ -1,43 +1,81 @@
+
+Single Responsibility Principle (SRP)
+A class should have only one responsibility (one reason to change).
+
+Bad Example (Violates SRP)
+One class is doing too many things:
+
 #include <iostream>
-#include <fstream>
-#include <vector>
+#include <string>
 using namespace std;
 
-class FileWriter {
+class User {
 public:
-    void writeToFile(string filename, string data) {
-        ofstream file(filename);
-        file << data;
-        file.close();
+    string name;
+
+    User(string n) : name(n) {}
+
+    void saveToDatabase() {
+        cout << "Saving user to database...\n";
+    }
+
+    void sendWelcomeEmail() {
+        cout << "Sending welcome email...\n";
+    }
+};
+Problem:
+User is doing 3 jobs:
+
+Storing user data
+
+Database work
+
+Email sending
+
+If email logic changes → modify class
+If database logic changes → modify class
+If user behaviour changes → modify class
+
+Too many reasons to change → SRP broken
+-----------------------------------------
+Good Example (Follows SRP)
+Break the responsibilities into three separate classes:
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+// 1. Only stores data
+class User {
+public:
+    string name;
+    User(string n) : name(n) {}
+};
+
+// 2. Only handles saving user
+class UserRepository {
+public:
+    void save(const User& user) {
+        cout << "Saving " << user.name << " to database...\n";
     }
 };
 
-class FileReader {
+// 3. Only handles email
+class EmailService {
 public:
-    vector<string> readFromFile(string filename) {
-        vector<string> data;
-        string line;
-        ifstream file(filename);
-        while (getline(file, line)) {
-            data.push_back(line);
-        }
-        file.close();
-        return data;
+    void sendWelcome(const User& user) {
+        cout << "Sending welcome email to " << user.name << "...\n";
     }
-};
-
-class FileManager : public FileReader, public FileWriter {
-
 };
 
 int main() {
-    FileManager file_manager;
-    file_manager.writeToFile("data.txt", "Hello, World!");
+    User user("Alice");
 
-    vector<string> data = file_manager.readFromFile("data.txt");
-    for (string line : data) {
-        cout << line << endl;
-    }
+    UserRepository repo;
+    EmailService email;
+
+    repo.save(user);
+    email.sendWelcome(user);
 
     return 0;
 }
