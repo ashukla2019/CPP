@@ -6,13 +6,13 @@ using namespace std;
 int main()
 {
 	/****************Create/Initializations***********************/
-		//initialize list with default values
+		//initialize deque with default values
 		//deque<int>dq(5);
 		
-		//initialize list with same values
+		//initialize deque with same values
 		//deque<int>dq(5, 10);
 		
-		//initialize list with initializer list
+		//initialize deque with initializer list
 		deque<int>dq = {10, 20, 30, 40, 20};
 
 		//Using other containers:
